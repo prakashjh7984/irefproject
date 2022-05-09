@@ -1,0 +1,91 @@
+{% extends 'hod_template/base_template.html' %}
+{% block page_title %}
+Manage Student Document
+{% endblock page_title %}
+{% block main_content %}
+<!-- Main content -->
+<section class="content">
+  <div class="container-fluid">
+
+    
+
+    {% if messages %}
+    <div class="form-group">
+      <div class="col-12">
+        {% for message in messages %}
+        {% if message.tags == "error" %}
+        <div class="alert alert-danger alert-dismissible fade show" role="alert" style="margin-top: 10px;">
+          {{ message }}
+          <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        {% elif message.tags == "success" %}
+        <div class="alert alert-success alert-dismissible fade show" role="alert" style="margin-top: 10px;">
+          {{ message }}
+          <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        {% endif %}
+        {% endfor %}
+      </div>
+    </div>
+    {% endif %}
+
+
+
+    <div class="row">
+      <div class="col-12">
+        <div class="card">
+          <div class="card-header">
+            
+            
+          </div>
+          <!-- /.card-header -->
+          <div class="card-body table-responsive p-0">
+            <table id="example" class="table">
+              <thead>
+                <tr>
+                  <th>ID</th>
+                  <th>Action</th>
+                  <th>First Name</th>
+                  <th>Last Name</th>
+                  <th>Email</th>
+                  <th>Session Year</th>
+                  <th>Course</th>
+                  
+                </tr>
+              </thead>
+              <tbody>
+                {% for student in students %}
+                <tr>
+                  <td>{{ student.admin.id }}</td>
+                  <td>
+                    <a href="{% url 'college_document' student_id=student.admin.id %}" class="btn btn-primary">Upload Document</a>
+                    <!-- <a href="{% url 'delete_student' student.admin.id %}" class="btn btn-danger">Delete</a> -->
+                  </td>
+                  <td>{{ student.admin.first_name }}</td>
+                  <td>{{ student.admin.last_name }}</td>
+                  <td>{{ student.admin.email }}</td>
+
+                  <td>{{ student.session_year.session_start_year }} TO {{ student.session_year.session_end_year }}
+                  </td>
+                  
+
+                  <td>{{ student.course.course_name }}</td>
+                  
+                </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+          <!-- /.card-body -->
+        </div>
+        <!-- /.card -->
+      </div>
+    </div>
+  </div>
+</section>
+<!-- /.content -->
+{% endblock main_content %}

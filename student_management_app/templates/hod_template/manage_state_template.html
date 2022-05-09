@@ -1,0 +1,60 @@
+{% extends 'hod_template/base_template.html' %}
+{% block page_title %}
+Manage State
+{% endblock page_title %}
+{% block main_content %}
+    <!-- Main content -->
+    <section class="content">
+      <div class="container-fluid">
+
+        <a class="btn btn-primary" href="{% url 'add_state' %}" role="button">+ Add State</a> <br/>&nbsp;
+
+           <div class="row">
+          <div class="col-12">
+            <div class="card">
+              <div class="card-header">
+                <h3 class="card-title">State Details</h3>
+
+
+              </div>
+              <!-- /.card-header -->
+              <div class="card-body table-responsive p-0">
+                <table id="example" class="table">
+                  <thead>
+                    <tr>
+                      <th>ID</th>
+                      <th> State Name</th>
+                      <th> Country Name</th>
+                      <th>Action</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                  {% for state in states %}
+                    <tr>
+                      <td>{{ state.id }}</td>
+                      <td>{{ state.name }}</td>
+                      <td>{{ state.country }}</td>
+                       <td><a href="/edit_state/{{ state.id }}" class="btn btn-success">Edit</a>
+                        <a href="{% url 'delete_state' state.id %}" class="btn btn-danger confirm-delete">Delete</a>
+                      </td>
+                    </tr>
+                  {% endfor %}
+                  </tbody>
+                </table>
+              </div>
+              <!-- /.card-body -->
+            </div>
+            <!-- /.card -->
+          </div>
+        </div>
+      </div>
+    </section>
+    <!-- /.content -->
+{% endblock main_content %}
+{% block custom_js %}
+<script>
+  $(document).on('click', '.confirm-delete', function(){
+    return confirm('Are you sure you want to delete this?');
+  })
+</script>
+{% endblock custom_js %}

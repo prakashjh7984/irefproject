@@ -1,0 +1,361 @@
+{% comment %} {% extends 'student_template/base_template.html' %} {% endcomment %}
+{% block page_title %}
+{% comment %} Name : {{ user.first_name }} {{ user.last_name }} {% endcomment %}
+{% endblock page_title %}
+{% block main_content %}
+{% load static %}
+<section>
+    <html>
+
+    <head>
+        <link rel="stylesheet" type="text/css" href="css.css" />
+        <title>MARKSHEET PAGE</title><!-- Latest compiled and minified CSS -->
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
+            integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+
+        <!-- Optional theme -->
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css"
+            integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+
+        <!-- Latest compiled and minified JavaScript -->
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"
+            integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
+            crossorigin="anonymous"></script>
+        <style>
+
+            th{
+                text-align: center !important;
+            }
+
+            #content {
+                margin-top: 4px !important;
+            }
+
+            #body {
+                background-image: url();
+                height: 1100px;
+                width: 900px;
+            }
+
+            #header {
+                height: 105px;
+                font-family: Agency FB;
+                font-weight: bold;
+                font-size: 55px;
+            }
+
+            #information {
+                background-image: url();
+                margin-top: 4px;
+            }
+
+            td.a {
+                font-size: 15px;
+                color: #0c0c0c;
+                font-family: Century;
+                {% comment %} font-weight: bold; {% endcomment %}
+            }
+
+            td.b {
+                font-size: 14px;
+                color: black;
+                font-weight: bold;
+                font-family: Century;
+
+            }
+
+            img.signature {
+                width :200px;
+                
+            }
+
+            img.sign {
+                width :200px;
+                float: left;
+                margin-left: 240;
+            }
+
+            #theorymarks {}
+
+            .logo{
+                text-align: center;
+              }
+
+              body{
+                  background-color:#e9ebee;
+                  margin-top:0px;
+                  margin-left:0px;
+                }
+        </style>
+    </head>
+
+    <div id="body">
+
+        <body>
+            <div id="header" style="text-align: center">
+                <img src="{% static "dist/img/IREF_GMS_LOGO_512x128.jpg" %}" alt="UNIVERSITY LOGO" />
+                
+                <br>
+                <p
+                    style="font-family:Bodoni MT;font-size:23px;font-style:italic;position:absolute;margin-left:250px;margin-top:-5px;"></p>
+                <p
+                    style="font-family:Arial;font-size:15px;font-style:italic;position:absolute;margin-left:693px;margin-top:-5;">
+                    </p>
+
+                    
+            </div>
+            
+            <div style="text-align: center">
+                <p
+                    style="font-family:Bodoni MT;font-size:18px;font-style:italic;position:absolute;margin-left:250px;margin-top:2px;">ISO: 9001 I ISO: 21001 I IAO Accredited</p>
+            </div>
+
+        
+
+            <div id="information">
+                
+
+                <table width="910">
+                    <tr>
+                        <td colspan="11"></td>
+                        <td class="a" align="right">Sr. No.-..........<font color="black" style="bold;"></font>
+                        </td>
+                        <td class="a" align="center"><button onclick="window.print()" >Print</button></td>
+                    </tr>
+                    
+
+                    <tr>
+                        <td class="a">Name of the Programme</td>
+                        <td class="a">:</td>
+                        <td colspan="3" class="b">{{ student.exam_course.course_name }}</td>
+                        <td class="a"></td>
+                        <td class="a"></td>
+                        <td class="b"></td>
+                        <td class="a">Permanent Registration Number</td>
+                        <td class="a">:</td>
+                        <td colspan="3" class="b">{{ student.prn_number }}</td>
+                    </tr>
+
+                    
+
+                    
+
+                    <tr>
+                        
+                        <td class="a">Name of the student</td>
+                        <td class="a">:</td>
+                        <td colspan="3" class="b">{{ user.first_name }} {{ user.last_name }}</td>
+                        <td class="a"></td>
+                        <td class="a"></td>
+                        <td class="b"></td>
+                        <td class="a">Semester</td>
+                        <td class="a">:</td>
+                        <td class="b">{{ studentresult.first.semester_id.semesters }}</td>
+                        
+                    </tr>
+
+                    <tr>
+                        
+                        <td class="a">Examination Month</td>
+                        <td class="a">:</td>
+                        <td colspan="3" class="b">{{ studentresult.first.exam_months  }}</td>
+                        {% comment %} <td class="a"></td>
+                        <td class="a"></td>
+                        <td class="b"></td> {% endcomment %}
+                        {% comment %} <td class="a">Session</td>
+                        <td class="a">:</td>
+                        <td colspan="5" class="b">{{ student.session_year.session_start_year }}-{{student.session_year.session_end_year }}</td> {% endcomment %}
+                        {% comment %} <td class="a">Semester</td>
+                        <td class="a">:</td>
+                        <td colspan="2" class="b">{{ studentresult.first.semester_id.semesters }}</td> {% endcomment %}
+
+                    </tr>
+
+                    
+
+                    {% comment %} <tr>
+                        <td class="a"></td>
+                        <td class="a"></td>
+                        <td class="b"></td>
+                        <td class="a">Session</td>
+                        <td class="a">:</td>
+                        <td class="b">{{ student.session_year.session_start_year }}-{{student.session_year.session_end_year }}</td>
+
+                    </tr> {% endcomment %}
+
+                    
+
+
+                    
+
+                    
+            </div>
+
+            <table height="50" width="895">
+                <tr>
+                    <td class="b">
+                        <font size="2" color="black" style="bold;">Marksheet Obtain from - Institute of Real Estate and Finance</font>
+                    </td>
+                    <!-- <td class=a>
+                        <font face="" size="2">Aggregate Pass % in each Practical paper = 50%</font>
+                    </td> -->
+                </tr>
+            </table>
+            
+
+            <div id="content" class="mt-2">
+                <table height="200px" width="895" border="1" bordercolor="#ff3333" cellpadding="1" cellspacing="0" align="center">
+                    <thead>
+                        <tr>
+                            <th class="b" align="center" rowspan="2">Subject Code</th>
+                            <th class="b" align="center" rowspan="2">Subject Name<br></th>
+                            <th class="a" align="center" rowspan="2">Credits</th>
+                            <th align="center" class="a" colspan="2">Internal<br>Marks</th>
+                            <th align="center" class="a" colspan="2">External<br>Marks</th>
+                            <th align="center" class="a" rowspan="2">Total Max.<br>Marks</th>
+                            <th align="center" class="a" rowspan="2">Total<br>Marks<br>Obtain</th>
+                            <th align="center" class="a" rowspan="2">Remarks</th>
+                            <tr>
+                                <th align="center" class="a">MM</th>
+                                <th align="center" class="a">MO</th>
+                                <th align="center" class="a">MM</th>
+                                <th align="center" class="a">MO</th>
+                            </tr>
+
+
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for row in studentresult %}
+                    <tr>
+                        
+                    <td class="b" align="center">{{ row.subject_id.subject_code }}</td>
+                    <td align="center" class="b">{{ row.subject_id.subject_name }}</td>
+                    <td class="b" align="center">{{ row.subject_credits }}</td>
+                    <td align="center" class="b">{{ row.total_internal_marks }}</td>
+                    <td align="center" class="b">{{ row.subject_internal_marks }}</td>
+                    <td align="center" class="b">{{ row.total_external_marks }}</td>
+                    <td align="center" class="b">{{ row.subject_external_marks }}</td>
+                    <td align="center" class="b">{{ row.total_max_marks }}</td>
+                    <td align="center" class="b">{{ row.total_marks }}</td>
+                    <td align="center" class="b">{{ row.exam_status }}</td>
+                    <!-- <td align="center" class="b">D</td> -->
+                {% endfor %}
+                </tbody>
+                    
+                </table>
+ 
+                
+                
+            
+
+                <table height="50" width="895">
+                    <tr>
+                        <td class=a>
+                            <font face="" size="2">Aggregate Pass % in each Theory paper = 40%</font>
+                        </td>
+                        <!-- <td class=a>
+                            <font face="" size="2">Aggregate Pass % in each Practical paper = 50%</font>
+                        </td> -->
+                    </tr>
+                </table>
+                
+                <table height="50" width="895">
+                    <tr>
+                        <td class="a">
+                           <b> Grand Total <br>(out of {{total_maximum_marks}})  : {{total_obtain_marks}}</b> <br>
+                           <br>
+                           <br>
+                           <b>
+                               Status :
+                            {% if percent >= 40 %}
+                            <span class="">Pass</span>
+                            {% else %}
+                            <span class="">Fail</span>
+                            {% endif %}</b>
+                           <br>
+                           <br>
+                           <b> Precentage : {{percent}} %</b>
+                           <br>
+                           <br>
+                           {% comment %} <b>Grade :
+                            {% if percent <= 39 %}
+                            <span class="">D</span>
+                            
+                            
+                            {% else %}
+                            <span>A+</span>
+                            {% endif %}</b> {% endcomment %}
+                        </td>
+                        
+                        <td class="a">
+                             
+                        </td>
+
+                        
+                    </tr>
+                </table>
+
+            </div>
+
+            <table height="50" width="895">
+                <tr>
+                    <td class=a>
+
+                    </td>
+                    <!-- <td class=a>
+                        <font face="" size="2">Aggregate Pass % in each Practical paper = 50%</font>
+                    </td> -->
+                </tr>
+            </table>
+
+            {% comment %} <div class="container-fluid">
+                <div class="card" align="center" >
+                    <img class="sign" src="{% static "dist/img/amar_sign-removebg-preview.png" %}" />
+                </div>
+
+            </div> {% endcomment %}
+            <div class="container-fluid">
+                
+                <div class="card" align="left" >
+                    <img class="sign" src="{% static "dist/img/Abhay_Online_Signature__651x383.png" %}" />
+                    
+
+                </div>
+                
+                <div class="card" align="right" >
+                    
+
+                    <img class="signature" src="{% static "dist/img/amar_sign-removebg-preview.png" %}" />
+                </div>
+
+            </div>
+            <table width="895" height="150" >
+                <tr>
+                    {% comment %} <td></td> {% endcomment %}
+                    <!-- <td></td> -->
+                    <td align="center" height="150" colspan="2"><b>Director</b></td>
+                    <td align="right"><b>Controller of Examinations</b></td>
+                </tr>
+
+                <tr>
+                    <td><b>Grading System</b> <br> A+ Distinction  : 70 % and above 
+                    <br> A First Class  : 60 % to 69.99 % 
+                    <br> B Second Class  : 50 % to 59.99 % 
+                    <br> C Pass Class : 40 % to 49.99 % <br> D Fail  : Below 40 % <br><br><b>Abbreviation :</b> F=Fail,
+                    P=Pass,                     MM=Maximum Mark,              MO=Mark Obtained</td>
+                    
+                </tr>
+                <br>
+                <br>
+                
+                
+            </table>
+
+
+        </body>
+    </div>
+
+    </html>
+</section>
+{% endblock main_content %}

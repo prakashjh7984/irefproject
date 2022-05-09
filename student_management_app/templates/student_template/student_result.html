@@ -1,0 +1,85 @@
+{% extends 'student_template/base_template.html' %}
+{% block page_title %}
+Name : {{ user.first_name }} {{ user.last_name }}
+{% endblock page_title %}
+{% block main_content %}
+<!-- Main content -->
+<section class="content">
+  <div class="container-fluid">
+    {% comment %} <div class="col-md-12"><div class="row"><h4>Name : {{ user.first_name }} {{ user.last_name }}</h4></div></div> {% endcomment %}
+    <!-- <div class="col-md-6"><div class="row"><h2>Subject</h2></div></div> -->
+    <div class="row">
+      <div class="col-md-12">
+        <!-- general form elements -->
+
+        <!-- /.card -->
+        <div class="card card-primary">
+          <div class="card-header">
+            <h3 class="card-title">Result</h3>
+          </div>
+
+          <div class="card-body table-responsive p-0 mt-2">
+            <table id="example" class="table">
+              <thead>
+              <tr>
+                <th>ID</th>
+                <th>View Marksheet</th>
+                <th>Exam Months</th>
+                <th>Course</th>
+                <th>Subject</th>
+                <th>Subject Code</th>
+                <th>Semester</th>
+                <th>Credits</th>
+                <th>Total Internal Marks</th>
+                <th>Internal Marks</th>
+                <th>Total External Marks</th>
+                <th>Exxnal Marks</th>
+                <th>Total Max Marks</th>
+                <th>Total Marks Obtained</th>
+                <th>Exam Status</th>
+                <th>Remarks</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for row in studentresult %}
+              <tr>
+                <td>{{ row.id }}</td>
+                <td><a href="{% url 'view_marksheet' row.semester_id.id %}" class="btn btn-success">View Marksheet</a></td>
+                <td>{{ row.exam_months }}</td>
+                <td>{{ row.course_id.course_name }}</td>
+                <td>{{ row.subject_id.subject_name }}</td>
+                <td>{{ row.subject_id.subject_code }}</td>
+                <td>{{ row.semester_id.semesters }}</td>
+                <td>{{ row.subject_credits }}</td>
+                <td>{{ row.total_internal_marks }}</td>
+                <td>{{ row.subject_internal_marks }}</td>
+                <td>{{ row.total_external_marks }}</td>
+                <td>{{ row.subject_external_marks }}</td>
+                <td>{{ row.total_marks }}</td>
+                <td>{{ row.total_max_marks }}</td>
+                
+                <td>{{ row.exam_status }}</td>
+                <td>
+                  {% if row.subject_external_marks >= 40 %}
+                  <span class="alert alert-success">PASS</span>
+                  {% elif row.exam_status == "Not Attempt" %}
+                  <span class="alert-secondary">Not available</span>
+                  {% else %}
+                  <span class="alert alert-danger">FAIL</span>
+                  {% endif %}
+                </td>
+              </tr>
+              {% endfor %}
+            </tbody>
+            </table>
+          </div>
+        </div>
+
+
+
+      </div>
+    </div>
+  </div>
+</section>
+<!-- /.content -->
+{% endblock main_content %}

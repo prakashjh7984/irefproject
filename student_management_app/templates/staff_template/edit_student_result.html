@@ -1,0 +1,214 @@
+{% extends 'staff_template/base_template.html' %}
+{% block page_title %}
+Edit Results
+{% endblock page_title %}
+{% block main_content %}
+    <!-- Main content -->
+    <section class="content">
+      <div class="container-fluid">
+                <div class="row">
+              <div class="col-md-12">
+            <!-- general form elements -->
+             <form action="{% url 'edit_student_result' %}" method="post">
+                 {% csrf_token %}
+            <div class="card card-primary">
+              <div class="card-header">
+                <h3 class="card-title">Edit Results</h3>
+              </div>
+              <!-- /.card-header -->
+              <!-- form start -->
+                <div class="card-body">
+                    {{ form }}
+                   <div class="form-group">
+                      {% if messages %}
+                        {% for message in messages %}
+                        {% if message.tags == 'error' %}
+                        <div class="alert alert-danger" style="margin-top:10px">{{ message }}</div>
+                        {% endif %}
+                        {% if message.tags == 'success' %}
+                        <div class="alert alert-success" style="margin-top:10px">{{ message }}</div>
+                        {% endif %}
+                        {% endfor %}
+                      {% endif %}
+                    </div>
+
+                </div>
+                <!-- /.card-body -->
+
+                <div class="card-footer">
+                  <button type="submit" class="btn btn-primary btn-block" id="fetch_student">Update Result</button>
+                </div>
+            </div>
+             </form>
+            <!-- /.card -->
+
+
+
+          </div>
+          </div>
+
+      </div>
+    </section>
+    <!-- /.content -->
+{% endblock main_content %}
+{% block custom_js %}
+<script>
+    $(document).ready(function(){
+        $("#id_session_ids").change(function(){
+            fetchStudents();
+        });
+        $("#id_course_id").change(function(){
+            fetchSubjects();
+            // fetchSemesters();            
+
+        });
+        $("#id_subject_id").change(function(){
+            fetchStudents();
+        });
+        $("#id_semester_id").change(function(){
+            fetchStudents();
+        });
+
+        $("#id_student_ids").change(function(){
+            fetch_result_student();
+        })
+
+        function fetchSubjects(){
+            var session_year=$("#id_session_ids").val()
+            var course=$("#id_course_id").val()
+            var subject=$("#id_subject_id").val()
+            var semester=$("#id_semester_id").val()
+
+            $.ajax({
+                url:'{% url 'get_subjects' %}',
+                type:'POST',
+                data:{course:course,subject:subject,semester:semester,session_year:session_year},
+            })
+            .done(function(response){
+                var json_data=JSON.parse(response);
+                console.log(json_data)
+                // var semester_json=JSON.parse(response);
+                // console.log(semester_json)
+                var div_data="";
+                // var semester_data="";
+                for(key in json_data)
+                {
+                    div_data+="<option value='"+json_data[key]['id']+"'>"+json_data[key]['name']+"</option>";
+                    
+                }
+                // for(key in semester_json)
+                // {
+                //     div_data+="<option value='"+json_data[key]['id']+"'>"+json_data[key]['name']+"</option>";
+                    
+                // }
+
+                $("#id_subject_id").html(div_data);
+                // $("#id_semester_id").html(div_data);
+
+            })
+            .fail(function(){
+                alert("Error in Fetching subject")
+            });
+        }
+
+        function fetchSemesters(){
+            var session_year=$("#id_session_ids").val()
+            var course=$("#id_course_id").val()
+            var subject=$("#id_subject_id").val()
+            var semester=$("#id_semester_id").val()
+
+            $.ajax({
+                url:'{% url 'get_semesters' %}',
+                type:'POST',
+                data:{course:course,subject:subject,semester:semester,session_year:session_year},
+            })
+            .done(function(response){
+                var json_data=JSON.parse(response);
+                console.log(json_data)
+                var div_data="";
+                
+                for(key in json_data)
+                {
+                    div_data+="<option value='"+json_data[key]['id']+"'>"+json_data[key]['name']+"</option>";
+                    
+                }
+                // for(key in semester_json)
+                // {
+                //     div_data+="<option value='"+json_data[key]['id']+"'>"+json_data[key]['name']+"</option>";
+                    
+                // }
+
+                // $("#id_subject_id").html(div_data);
+                $("#id_semester_id").html(div_data);
+
+            })
+            .fail(function(){
+                alert("Error in Fetching semester")
+            });
+        }
+
+        function fetchStudents(){
+            var session_year=$("#id_session_ids").val()
+            var course=$("#id_course_id").val()
+            var subject=$("#id_subject_id").val()
+            var semester=$("#id_semester_id").val()
+
+            $.ajax({
+                url:'{% url 'get_students' %}',
+                type:'POST',
+                data:{course:course,subject:subject,semester:semester,session_year:session_year},
+            })
+            .done(function(response){
+                var json_data=JSON.parse(response);
+                console.log(json_data)
+                var div_data="";
+                for(key in json_data)
+                {
+                    div_data+="<option value='"+json_data[key]['id']+"'>ID : "+json_data[key]['id']+" : "+json_data[key]['name']+"</option>";
+                }
+
+                $("#id_student_ids").html(div_data);
+
+            })
+            .fail(function(){
+                alert("Error in Fetching Student")
+            });
+        }
+
+        function fetch_result_student(){
+            var id_student_ids=$("#id_student_ids").val()
+            var course=$("#id_course_id").val()
+            var subject=$("#id_subject_id").val()
+            var semester=$("#id_semester_id").val()
+
+            $.ajax({
+                url:'{% url 'fetch_result_student' %}',
+                type:'POST',
+                data:{course_id:course,subject_id:subject,semester_id:semester,student_id:id_student_ids},
+            })
+            .done(function(response){
+                if(response=="False"){
+                    alert("Result Not Found")
+                }
+                else{
+                    var json_data=JSON.parse(response);
+                    // $("#id_exam_months").val(json_data['exam_months'])
+                    $("#id_subject_credits").val(json_data['subject_credits'])
+                    $("#id_internal_marks").val(json_data['internal_marks'])
+                    $("#id_external_marks").val(json_data['external_marks'])
+                }
+
+            })
+            .fail(function(){
+                alert("Error in Fetching Student")
+            });
+        }
+    })
+
+
+</script>
+<script>// In your Javascript (external .js resource or <script> tag)
+    $(document).ready(function() {
+        $('#id_course').select2();
+    });</script>
+{% endblock custom_js %}

@@ -1,0 +1,58 @@
+{% extends 'hod_template/base_template.html' %}
+{% block page_title %}
+Manage Country
+{% endblock page_title %}
+{% block main_content %}
+    <!-- Main content -->
+    <section class="content">
+      <div class="container-fluid">
+
+        <a class="btn btn-primary" href="{% url 'add_country' %}" role="button">+ Add Country</a> <br/>&nbsp;
+
+           <div class="row">
+          <div class="col-12">
+            <div class="card">
+              <div class="card-header">
+                <h3 class="card-title">Country Details</h3>
+
+                
+              </div>
+              <!-- /.card-header -->
+              <div class="card-body table-responsive p-0">
+                <table id="example" class="table">
+                  <thead>
+                    <tr>
+                      <th>ID</th>
+                      <th> Country Name</th>
+                      <th>Action</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                  {% for country in countries %}
+                    <tr>
+                      <td>{{ country.id }}</td>
+                      <td>{{ country.name }}</td>
+                       <td><a href="/edit_country/{{ country.id }}" class="btn btn-success">Edit</a>
+                        <a href="{% url 'delete_country' country.id %}" class="btn btn-danger confirm-delete">Delete</a>
+                      </td>
+                    </tr>
+                  {% endfor %}
+                  </tbody>
+                </table>
+              </div>
+              <!-- /.card-body -->
+            </div>
+            <!-- /.card -->
+          </div>
+        </div>
+      </div>
+    </section>
+    <!-- /.content -->
+{% endblock main_content %}
+{% block custom_js %}
+<script>
+  $(document).on('click', '.confirm-delete', function(){
+    return confirm('Are you sure you want to delete this?');
+  })
+</script>
+{% endblock custom_js %}

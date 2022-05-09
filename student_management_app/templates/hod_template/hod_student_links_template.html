@@ -1,0 +1,56 @@
+{% extends 'hod_template/base_template.html' %}
+{% block page_title %}
+Manage All Important Links
+{% endblock page_title %}
+{% block main_content %}
+<section class="content">
+<div class="container ">
+    <a class="btn btn-primary" href="{% url 'add_link' %}" role="button">+ Add Important links</a> <br/>&nbsp;
+    <br><br>
+    <div class="row">
+      <div class="col-md-12">
+        <h5>All Important Links:</h5>
+
+        <div class="card card-body table-responsive p-0">
+          <table id="example" class="table">
+            <thead>
+              <tr>
+                <th>Class Links</th>
+                <th>Comment</th>
+                <th>Date</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for n in links %}
+              {% if n.types in "IMPORTANT_LINKS" %}
+              <tr>
+                <td>{{n.name}} </td>
+                <td>{{n.comments}} </td>
+                <td>{{n.created_at}} </td>
+                <td><a href="{{n.urls}}" class="btn btn-success" target="_blank">Open link</a>
+                    <a href="/edit_student_links/{{ n.id }}" class="btn btn-primary">Edit</a>
+                  <a href="{% url 'delete_link' n.id %}" class="btn btn-danger confirm-delete mt-1">Delete</a>
+                </td>
+
+              </tr>
+              {% endif %}
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <br><br>
+  </div>
+</section>
+
+{% endblock main_content %}
+{% block custom_js %}
+<script>
+  $(document).on('click', '.confirm-delete', function () {
+    return confirm('Are you sure you want to delete this?');
+  })
+</script>
+{% endblock custom_js %}

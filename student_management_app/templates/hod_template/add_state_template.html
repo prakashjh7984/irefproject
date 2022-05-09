@@ -1,0 +1,67 @@
+{% extends 'hod_template/base_template.html' %}
+{% block page_title %}
+Add State
+{% endblock page_title %}
+{% block main_content %}
+<!-- Main content -->
+<section class="content">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-12">
+                <!-- general form elements -->
+                <div class="card card-primary">
+                    <div class="card-header">
+                        <h3 class="card-title">Add State</h3>
+                    </div>
+                    <!-- /.card-header -->
+                    <!-- form start -->
+                    {% url 'add_state_save' as action_path %}
+                {% include 'hod_template/state_form.html' with  form=form action_path=action_path button_text="Add State" %}
+                </div>
+                <!-- /.card -->
+
+
+
+            </div>
+        </div>
+    </div>
+</section>
+<!-- /.content -->
+{% endblock main_content %}
+{% block custom_js %}
+<script>
+    $(document).ready(function () {
+        $("#id_state").keyup(function () {
+            var state = $(this).val();
+
+            if (state!= "") {
+                $.ajax({
+                    url: '{% url 'check_state_exist' %}',
+                    type: 'POST',
+                    data: { state: state }
+                })
+                    .done(function (response) {
+                        console.log(response);
+                        if (response == "True") {
+                            $(".state_error").remove();
+                            $("<span class='state_error' style='padding: 5px;color: red;font-weight: bold;'>Course already exist</span>").insertAfter("#id_state");
+                        }
+                        else {
+                            $(".state_error").remove();
+                            $("<span class='state_error' style='padding: 5px;color: green;font-weight: bold;'>This is new state</span>").insertAfter("#id_state");
+                        }
+                    })
+                    .fail(function () {
+                        console.log("failed");
+                    })
+            }
+            else {
+                $(".state_error").remove();
+            }
+
+        });
+
+
+    });
+</script>
+{% endblock custom_js %}

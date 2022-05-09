@@ -1,0 +1,64 @@
+{% extends 'hod_template/base_template.html' %}
+{% block page_title %}
+Manage Semester
+{% endblock page_title %}
+{% block main_content %}
+    <!-- Main content -->
+    <section class="content">
+      <div class="container-fluid">
+
+        <a class="btn btn-primary" href="{% url 'add_semester' %}" role="button">+ Add Semester</a> <br/>&nbsp;
+
+           <div class="row">
+          <div class="col-12">
+            <div class="card">
+              <div class="card-header">
+                <h3 class="card-title">Semester Details</h3>
+
+                
+              </div>
+              <!-- /.card-header -->
+              <div class="card-body table-responsive p-0">
+                <table id="example" class="table">
+                  <thead>
+                    <tr>
+                      <th>ID</th>
+                      <th>Semester Name</th>
+                      {% comment %} <th>Course Name</th>
+                      <th>Course ID</th>
+                      <th>Staff Name</th> {% endcomment %}
+                      <th>Action</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                  {% for semester in semesters %}
+                    <tr>
+                      <td>{{ semester.id }}</td>
+                      <td>{{ semester.semesters }}</td>
+                      {% comment %} <td>{{ semester.course.course_name }}</td>
+                      <td>{{ semester.course.id }}</td>
+                      <td>{{ semester.staff.first_name }} {{ subject.staff.last_name }}</td> {% endcomment %}
+                      <td><a href="/edit_semester/{{ semester.id }}" class="btn btn-success">Edit</a>
+                      <a href="{% url 'delete_semester' semester.id %}" class="btn btn-danger confirm-delete">Delete</a></td>
+                    </tr>
+                  {% endfor %}
+                  </tbody>
+                </table>
+              </div>
+              <!-- /.card-body -->
+            </div>
+            <!-- /.card -->
+          </div>
+        </div>
+      </div>
+    </section>
+    <!-- /.content -->
+{% endblock main_content %}
+{% block custom_js %}
+<script>
+  $(document).on('click', '.confirm-delete', function(){
+    return confirm('Are you sure you want to delete this?');
+  })
+</script>
+{% endblock custom_js %}
+

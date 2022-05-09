@@ -1,0 +1,218 @@
+{% extends 'hod_template/base_template.html' %}
+{% block page_title %}
+Edit class Links
+{% endblock page_title %}
+{% block main_content %}
+<!-- Main content -->
+<section class="content">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-md-12">
+        <!-- general form elements -->
+        <div class="card card-primary">
+          <div class="card-header">
+            <h3 class="card-title">Edit Classes links</h3>
+          </div>
+          <!-- /.card-header -->
+          <!-- form start -->
+
+          {% comment %} <form role="form" action="/imp_link_save" method="post">
+            {% csrf_token %}
+            <div class="card-body">
+              <div class="form-group">
+                <label>Important link </label>
+                <input type="text" class="form-control mb-2" name="important_name" placeholder="Enter link name"
+                  required>
+                <input type="url" class="form-control mt-2" name="important_urls" placeholder="Enter Link">
+                <input type="text" class="form-control mt-2" name="important_comment" placeholder="Enter Comment"
+                  required>
+              </div>
+
+
+              <div class="form-group">
+                {% if messages %}
+                {% for message in messages %}
+                {% if message.tags == 'error' %}
+                <div class="alert alert-danger" style="margin-top:10px">{{ message }}</div>
+                {% endif %}
+                {% if message.tags == 'success' %}
+                <div class="alert alert-success" style="margin-top:10px">{{ message }}</div>
+                {% endif %}
+                {% endfor %}
+                {% endif %}
+              </div>
+
+            </div>
+            <!-- /.card-body -->
+
+            <div class="card-footer">
+              <button type="submit" class="btn btn-primary btn-block">Add Link</button>
+            </div>
+          </form> {% endcomment %}
+
+          <div>
+            <form role="form" action="/edit_class_links_save" method="post">
+              {% csrf_token %}
+              <div class="card-body">
+                <div class="form-group">
+                  <label>Class Links </label>
+                  <input type="text" class="form-control mb-3" name="class_name" placeholder="Enter name" value="{{ links.name }}">
+                  <input type="hidden" class="form-control" name="link_id" value="{{ links.id }}">
+                  <input type="url" class="form-control mb-3" name="class_urls" value="{{ links.urls }}">
+                  <input type="text" class="form-control mt-2" name="class_comment" value="{{ links.comments }}">
+                </div>
+
+                <div class="form-group">
+                  {% if messages %}
+                  {% for message in messages %}
+                  {% if message.tags == 'error' %}
+                  <div class="alert alert-danger" style="margin-top:10px">{{ message }}</div>
+                  {% endif %}
+                  {% if message.tags == 'success' %}
+                  <div class="alert alert-success" style="margin-top:10px">{{ message }}</div>
+                  {% endif %}
+                  {% endfor %}
+                  {% endif %}
+                </div>
+
+              </div>
+              <!-- /.card-body -->
+
+              <div class="card-footer">
+                <button type="submit" class="btn btn-primary btn-block">Save Link</button>
+              </div>
+            </form>
+          </div>
+        </div>
+        <!-- /.card -->
+
+
+
+      </div>
+    </div>
+  </div>
+
+  {% comment %} <div class="container ">
+
+    <br><br>
+    <div class="row">
+      <div class="col-md-11">
+        <h5>All Payment Links:</h5>
+
+        <div class="card card-body table-responsive p-0">
+          <table id="example" class="table table-hover text-nowrap">
+            <thead>
+              <tr>
+                <th>Payment Links</th>
+                <th>Comment</th>
+                <th>Date</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for n in links %}
+              {% if n.types in "PAYMENT_LINKS" %}
+              <tr>
+                <td>{{n.name}} </td>
+                <td>{{n.comments}} </td>
+                <td>{{n.created_at}} </td>
+                <td><a href="{{n.urls}}" class="btn btn-success" target="_blank">Open link</a>
+                  <a href="{% url 'delete_link' n.id %}" class="btn btn-danger confirm-delete">Delete</a>
+                </td>
+
+              </tr>
+              {% endif %}
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <br><br>
+  </div> {% endcomment %}
+
+  {% comment %} <div class="container ">
+
+    <br><br>
+    <div class="row">
+      <div class="col-md-11">
+        <h5>All Important Links:</h5>
+
+        <div class="card card-body table-responsive p-0">
+          <table id="example" class="table table-hover text-nowrap">
+            <thead>
+              <tr>
+                <th>Important Links</th>
+                <th>Comment</th>
+                <th>Date</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for n in links %}
+              {% if n.types in "IMPORTANT_LINKS" %}
+              <tr>
+                <td>{{n.name}} </td>
+                <td>{{n.comments}} </td>
+                <td>{{n.created_at}} </td>
+                <td><a href="{{n.urls}}" class="btn btn-success" target="_blank">Open link</a>
+                  <a href="{% url 'delete_link' n.id %}" class="btn btn-danger confirm-delete">Delete</a>
+                </td>
+
+              </tr>
+              {% endif %}
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <br><br>
+  </div> {% endcomment %}
+
+  {% comment %} <div class="container ">
+
+    <br><br>
+    <div class="row">
+      <div class="col-md-11">
+        <h5>All Classes Links:</h5>
+
+        <div class="card card-body">
+          <table id="example" class="table table-sm-responsive">
+            <tr>
+              <th>Classes Links</th>
+              <th>Comment</th>
+              <th>Date</th>
+              <th>Action</th>
+            </tr>
+            {% for n in links %}
+            {% if n.types in "CLASS_LINKS" %}
+            <tr>
+              <td>{{n.name}} </td>
+              <td>{{n.comments}} </td>
+              <td>{{n.created_at}} </td>
+              <td><a href="{{n.urls}}" class="btn btn-success" target="_blank">Open link</a>
+                <a href="{% url 'delete_link' n.id %}" class="btn btn-danger confirm-delete">Delete</a>
+              </td>
+            </tr>
+            {% endif %}
+            {% endfor %}
+          </table>
+        </div>
+      </div>
+
+      <br><br>
+    </div>
+  </div> {% endcomment %}
+</section>
+<!-- /.content -->
+{% endblock main_content %}
+{% block custom_js %}
+<script>
+  $(document).on('click', '.confirm-delete', function () {
+    return confirm('Are you sure you want to delete this?');
+  })
+</script>
+{% endblock custom_js %}

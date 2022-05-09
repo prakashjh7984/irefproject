@@ -1,0 +1,351 @@
+{% extends 'staff_template/base_template.html' %}
+
+{% block page_title %}
+Add Results
+{% endblock page_title %}
+
+{% block main_content %}
+{% block custom_css %}
+  <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+
+  <style>
+    .select2-container--default .select2-selection--single .select2-selection__rendered {
+    color: #444;
+    line-height: 18px !important;
+    }
+  </style>
+{% endblock custom_css %}
+    <!-- Main content -->
+    <section class="content">
+      
+      <div class="container-fluid">
+                    <div class="row">
+              <div class="col-md-12">
+            <!-- general form elements -->
+             <form action="{% url 'save_student_result' %}" method="post">
+                 {% csrf_token %}
+            <div class="card card-primary">
+              <div class="card-header">
+                <h3 class="card-title">Add Results</h3>
+              </div>
+              <!-- /.card-header -->
+              <!-- form start -->
+                <div class="card-body">
+                  <div class="form-group">
+                    <label>Course </label>
+                    <select class="form-control" name="course" id="course">
+                        
+                        {% for course in courses %}
+                          <option value="{{ course.id }}">{{ course.course_name }}</option>
+                        {% endfor %}
+                    </select>
+                  </div>
+                  <div class="form-group">
+                    <label>Subject</label>
+                    <select class="form-control" name="subject" id="subject">
+                      
+                        {% for subject in subjects %}
+                          <option value="{{ subject.id }}">{{ subject.subject_name }}</option>
+                        {% endfor %}
+                    </select>
+                  </div>
+                  <div class="form-group">
+                    <label>Semester </label>
+                    <select class="form-control" name="semester" id="semester">
+                      
+                        {% for semester in semesters %}
+                          <option value="{{ semester.id }}">{{ semester.semesters }}</option>
+                        {% endfor %}
+                    </select>
+                  </div>
+                   
+                  
+                  <div class="form-group">
+                    <label>Session Year</label>
+                    <select class="form-control" name="session_year" id="session_year">
+                        {% for session_year in session_years %}
+                          <option value="{{ session_year.id }}">{{ session_year.session_start_year }} TO {{ session_year.session_end_year }}</option>
+                        {% endfor %}
+                    </select>
+                  </div>
+                   <div class="form-group">
+                      {% if messages %}
+                        {% for message in messages %}
+                        {% if message.tags == 'error' %}
+                        <div class="alert alert-danger" style="margin-top:10px">{{ message }}</div>
+                        {% endif %}
+                        {% if message.tags == 'success' %}
+                        <div class="alert alert-success" style="margin-top:10px">{{ message }}</div>
+                        {% endif %}
+                        {% endfor %}
+                      {% endif %}
+                    </div>
+
+                </div>
+                <!-- /.card-body -->
+
+                <div class="card-footer">
+                  <button type="button" class="btn btn-primary btn-block" id="fetch_student">Fetch Student</button>
+                </div>
+                <div id="student_data" class="card-footer">
+
+                </div>
+            </div>
+             </form>
+            <!-- /.card -->
+
+
+
+          </div>
+          </div>
+
+      </div>
+    </section>
+    <!-- /.content -->
+{% endblock main_content %}
+
+{% block custom_js %}
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+<script>// In your Javascript (external .js resource or <script> tag)
+  $(document).ready(function() {
+      $('#course').select2();
+  });</script>
+
+
+<script>
+  function add_number(){
+  let internal_marks = parseInt(document.getElementById("internal_marks").value);
+  let external_marks = parseInt(document.getElementById("external_marks").value);
+  let result = internal_marks + external_marks;
+  document.getElementById("total_marks").value = result;
+    {% comment %} return result; {% endcomment %}
+  };
+</script>
+
+<script>
+
+    $(document).ready(function(){
+      $("#course").change(function(){
+        fetchSubjects();
+        // fetchSemesters();
+        // fetch_subjects_semester();
+        })
+
+      $("#subject").change(function(){
+        // fetch_subjects_semester();
+      })
+
+      $("#semester").change(function(){
+        // fetch_subjects_semester();
+      })
+
+      function fetchSemesters(){
+            var session_year=$("#semester").val()
+            var course=$("#course").val()
+            var subject=$("#subject").val()
+            var semester=$("#semester").val()
+
+            $.ajax({
+                url:'{% url 'get_semesters' %}',
+                type:'POST',
+                data:{course:course,subject:subject,semester:semester,session_year:session_year},
+            })
+            .done(function(response){
+                var json_data=JSON.parse(response);
+                console.log(json_data)
+                // var semester_json=JSON.parse(response);
+                // console.log(semester_json)
+                var div_data="";
+                // var semester_data="";
+                for(key in json_data)
+                {
+                    div_data+="<option value='"+json_data[key]['id']+"'>"+json_data[key]['name']+"</option>";
+                    
+                }
+                // for(key in semester_json)
+                // {
+                //     div_data+="<option value='"+json_data[key]['id']+"'>"+json_data[key]['name']+"</option>";
+                    
+                // }
+
+                $("#semester").html(div_data);
+                // $("#id_semester_id").html(div_data);
+
+            })
+            .fail(function(){
+                alert("Error in Fetching semester")
+            });
+        }
+
+
+      function fetchSubjects(){
+            var session_year=$("#semester").val()
+            var course=$("#course").val()
+            var subject=$("#subject").val()
+            var semester=$("#semester").val()
+
+            $.ajax({
+                url:'{% url 'get_subjects' %}',
+                type:'POST',
+                data:{course:course,subject:subject,semester:semester,session_year:session_year},
+            })
+            .done(function(response){
+                var json_data=JSON.parse(response);
+                console.log(json_data)
+                // var semester_json=JSON.parse(response);
+                // console.log(semester_json)
+                var div_data="";
+                // var semester_data="";
+                for(key in json_data)
+                {
+                    div_data+="<option value='"+json_data[key]['id']+"'>"+json_data[key]['name']+"</option>";
+                    
+                }
+                // for(key in semester_json)
+                // {
+                //     div_data+="<option value='"+json_data[key]['id']+"'>"+json_data[key]['name']+"</option>";
+                    
+                // }
+
+                $("#subject").html(div_data);
+                // $("#id_semester_id").html(div_data);
+
+            })
+            .fail(function(){
+                alert("Error in Fetching subject")
+            });
+        }
+
+
+
+        $("#fetch_student").click(function(){
+            var course=$("#course").val()
+            var subject=$("#subject").val()
+            var semester=$("#semester").val()
+            var session_year=$("#session_year").val()
+
+            $.ajax({
+                url:'{% url 'get_students' %}',
+                type:'POST',
+                data:{course:course,subject:subject,session_year:session_year,semester:semester},
+            })
+            .done(function(response){
+                var json_data=JSON.parse(response);
+                console.log(json_data)
+                var div_data="<div class='form-group'><label>Student List</label><select class='student_list form-control' name='student_list' id='students_lists'>";
+                // $('#students_lists').select2();
+  
+                for(key in json_data)
+                {
+                    div_data+="<option value='"+json_data[key]['id']+"'>ID : "+json_data[key]['id']+" : "+json_data[key]['name']+"</option>";
+                } 
+                div_data+="</select>";
+                div_data+="</div>";
+                div_data+="<div class='form-group'><div class='row'>";
+                div_data+="<div class='col-lg-12'>";
+                div_data+="<label> Exam Months : </label><input type='month' name='exam_months' class='form-control' placeholder='Exam months'>";
+                div_data+="</div>";
+                div_data+="</div></div>";
+                div_data+="<div class='form-group'><div class='row'>";
+                div_data+="<div class='col-lg-12'>";
+                div_data+="<label> Credits : </label><input type='text' name='subject_credits' class='form-control' placeholder='Credits'>";
+                div_data+="</div>";
+                div_data+="</div></div>";
+
+                div_data+="<div class='form-group'><div class='row'>";
+                div_data+="<div class='col-lg-6'>";
+                div_data+="<label>Total Internal Marks : </label><select class='form-control' name='total_internal_marks'> ";
+                div_data+="<option value='30'>30</option>: ";
+                div_data+="</select>";
+
+                div_data+="</div>";
+                div_data+="<div class='col-lg-6'>";
+                div_data+="<label> Total External Marks : </label><select class='form-control' name='total_external_marks'> ";
+                div_data+="<option value='70'>70</option>: ";
+                div_data+="</select>";
+                div_data+="</div>";
+                div_data+="</div></div>";
+
+                div_data+="<div class='form-group'><div class='row'>";
+                div_data+="<div class='col-lg-6'>";
+                div_data+="<label> Internal Marks(obtain) : </label><input type='number' name='internal_marks' id='internal_marks' class='form-control' placeholder='Internal Marks'>";
+                div_data+="</div>";
+                div_data+="<div class='col-lg-6'>";
+                div_data+="<label> External Marks(Obtain) : </label><input type='number' name='external_marks' id='external_marks' class='form-control' placeholder='External Marks'>";
+                div_data+="</div></div>";
+                
+
+                
+
+                div_data+="<div class='form-group'><div class='row'>";
+                div_data+="<div class='col-lg-12'>";
+                div_data+="<label> Total Max Marks : </label><select class='form-control' name='total_max_marks'> ";
+                div_data+="<option value='100'>100</option>: ";
+                div_data+="</select>";
+                div_data+="</div>";
+                div_data+="</div></div>";
+
+                div_data+="<div class='form-group'><div class='row'>";
+                div_data+="<div class='col-lg-12'>";
+                div_data+="<label> Total Marks(Obtain) : </label><input type='number' name='total_marks' id='total_marks' class='form-control' placeholder='Total Marks'>";
+                div_data+="</div></div>";
+
+                
+
+                div_data+="<div class='form-group mt-2'>";
+                div_data+="<input type='button' name='clickbtn' value='Total' onclick='add_number()'";
+                div_data+="</div>";
+
+                div_data+="<div class='form-group'><div class='row'>";
+                div_data+="<div class='col-lg-12'>";
+                div_data+="<label>Exam Status: </label><select class='form-control' name='exam_status'> ";
+                div_data+="<option value='Fail'>Fail</option>: ";
+                div_data+="<option value='Pass'>Pass</option>: ";
+                div_data+="<option value='Not Attempt'>Not Attempt</option>: ";
+                div_data+="<option value='Others'>Others</option>: ";
+                div_data+="</select>";
+                div_data+="</div>";
+                div_data+="</div></div>";
+
+                div_data+="<div class='form-group mt-2'>";
+                div_data+="<button id='save_attendance' class='btn btn-success btn-block' type='submit'>Save Result</button>";
+                div_data+="</div>";
+
+                $("#student_data").html(div_data);
+                $('#students_lists').select2();
+
+                {% comment %} $("#total_marks").click(function add_number(){
+                  var internal_marks = parseInt(document.getElementsById('internal_marks').value);
+                  var external_marks = parseInt(document.getElementsById('external_marks').value);
+                  var result = internal_marks + external_marks;
+                  document.getElementById('total_marks').innerHTML = result;    
+                  }); {% endcomment %}
+
+                
+
+            })
+            .fail(function(){
+                alert("Error in Fetching Student")
+            });
+            
+        
+        });
+        // $('#students_lists').select2();
+        
+    })
+
+    
+    
+</script>
+
+<!-- <script>// In your Javascript (external .js resource or <script> tag)
+  $(document).ready(function() {
+      $('#students_lists').select2();
+  });
+</script> -->
+
+
+
+{% endblock custom_js %}

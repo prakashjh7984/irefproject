@@ -1,0 +1,68 @@
+{% extends 'hod_template/base_template.html' %}
+{% block page_title %}
+Add Country
+{% endblock page_title %}
+{% block main_content %}
+    <!-- Main content -->
+    <section class="content">
+      <div class="container-fluid">
+          <div class="row">
+              <div class="col-md-12">
+            <!-- general form elements -->
+            <div class="card card-primary">
+              <div class="card-header">
+                <h3 class="card-title">Add Country</h3>
+              </div>
+              <!-- /.card-header -->
+              <!-- form start -->
+              {% url 'add_country_save' as action_path %}
+                {% include 'hod_template/country_form.html' with  form=form action_path=action_path button_text="Add Country" %}
+            </div>
+            <!-- /.card -->
+
+
+
+          </div>
+          </div>
+      </div>
+    </section>
+    <!-- /.content -->
+{% endblock main_content %}
+{% block custom_js %}
+<script>
+    $(document).ready(function(){
+        $("#id_course").keyup(function(){
+            var country=$(this).val();
+
+           if(country!=""){
+                $.ajax({
+                    url:'{% url 'check_country_exist' %}',
+                    type:'POST',
+                    data:{course:course}
+                })
+                .done(function(response){
+                    console.log(response);
+                    if(response=="True"){
+                        $(".country_error").remove();
+                        $("<span class='country_error' style='padding: 5px;color: red;font-weight: bold;'>Course already exist</span>").insertAfter("#id_country");
+                    }
+                    else{
+                        $(".country_error").remove();
+                        $("<span class='country_error' style='padding: 5px;color: green;font-weight: bold;'>This is new course</span>").insertAfter("#id_country");
+                    }
+                })
+                .fail(function(){
+                    console.log("failed");
+                })
+            }
+            else{
+              $(".country_error").remove();
+            }
+
+        });
+
+        
+    });
+</script>
+{% endblock custom_js %}
+
