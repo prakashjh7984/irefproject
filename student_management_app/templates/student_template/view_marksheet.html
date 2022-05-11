@@ -278,13 +278,21 @@
                            <b> Precentage : {{percent}} %</b>
                            <br>
                            <br>
-                           {% comment %} <b>Grade :
-                            {% if percent <= 39 %}
-                            <span class="">D</span>
-                            
+                            {% comment %} <b>Grade :
+                            {% if percent >= 70 %} {% endcomment %}
+
+                            {% comment %} {% if 70 <= percent <= 100 %}
+                            {% elif 60 <= percent <= 69 %}
+                            <span >A</span>
+                            {% elif 50 <= percent <= 59 %}
+                            <span >B</span>
+                            {% elif 40 <= percent <= 49 %}
+                            <span >C</span> {% endcomment %}
+
+                            {% comment %} <span >A+</span>
                             
                             {% else %}
-                            <span>A+</span>
+                            <span>D</span>
                             {% endif %}</b> {% endcomment %}
                         </td>
                         

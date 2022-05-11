@@ -1,4 +1,5 @@
 import datetime
+from types import NoneType
 from django.contrib import messages
 from django.core.files.storage import FileSystemStorage
 from django.http.response import HttpResponseRedirect, HttpResponse
@@ -699,10 +700,11 @@ def view_marksheet(request,semester_id):
     total_maximum_marks=0
     total_obtain_marks=0
     for studentres in studentresult:
-        total_maximum_marks=total_maximum_marks + int(studentres.total_max_marks)
+        total_maximum_marks=total_maximum_marks + int( 0 if type(studentres.total_max_marks)==NoneType else studentres.total_max_marks)
         total_obtain_marks=total_obtain_marks + studentres.subject_internal_marks+ studentres.subject_external_marks
     # breakpoint()
-    percent=(total_obtain_marks*100)/total_maximum_marks;   
+    percent =0 if total_maximum_marks==0 else (total_obtain_marks*100)/total_maximum_marks;
+    # percent=(total_obtain_marks*100)/total_maximum_marks;   
     return render(request,"student_template/view_marksheet.html",{"studentresult":studentresult,'student':student,'total_maximum_marks':total_maximum_marks,'total_obtain_marks':total_obtain_marks,'percent':percent})            
 
 def determine_grade(scores):
