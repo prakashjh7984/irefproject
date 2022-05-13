@@ -704,22 +704,24 @@ def view_marksheet(request,semester_id):
         total_obtain_marks=total_obtain_marks + studentres.subject_internal_marks+ studentres.subject_external_marks
     # breakpoint()
     percent =0 if total_maximum_marks==0 else (total_obtain_marks*100)/total_maximum_marks;
-    # percent=(total_obtain_marks*100)/total_maximum_marks;   
-    return render(request,"student_template/view_marksheet.html",{"studentresult":studentresult,'student':student,'total_maximum_marks':total_maximum_marks,'total_obtain_marks':total_obtain_marks,'percent':percent})            
+    grade ="" if total_maximum_marks==0 else determine_grade(percent);
+     
+    return render(request,"student_template/view_marksheet.html",{"studentresult":studentresult,'student':student,'total_maximum_marks':total_maximum_marks,'total_obtain_marks':total_obtain_marks,'percent':percent,'grade':grade})            
 
 def determine_grade(scores):
-    if (scores >= 90) and (scores<= 100):
-        return 'A'
-    elif (scores >= 80) and (scores<= 89):
-        return 'B'
-    elif (scores >= 70) and (scores<= 79):
-        return 'C'
+    if (scores >= 70) and (scores<= 100):
+        return 'A+'
     elif (scores >= 60) and (scores<= 69):
-        return 'D'
+        return 'A'
     elif (scores >= 50) and (scores<= 59):
-        return 'E'
+        return 'B'
+    elif (scores >= 40) and (scores<= 49):
+        return 'C'
+    
     else:
-        return 'F'
+        return 'D'
+
+
 
 @csrf_exempt
 def check_email_exist(request):
