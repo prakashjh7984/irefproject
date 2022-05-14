@@ -986,7 +986,7 @@ def add_student_payment_receive(request,student_id):
 def add_student_offer_letter_fees_save(request):
     if request.method != "POST":
         messages.error(request, "Invalid Method!")
-        return redirect('add_course')
+        return redirect('show_student')
     else:
         form=AddStudentOfferLetterForm(request.POST)
         if form.is_valid():

@@ -1,0 +1,168 @@
+{% extends 'student_template/base_template.html' %}
+
+{% block main_content %}
+    <!-- Main content -->
+    <section class="content">
+      <div class="container-fluid">
+        <div class="row">
+          <div class="col-md-12">
+        <!-- general form elements -->
+        <div class="card card-primary">
+          <div class="card-header">
+            <h3 class="card-title">Student Payment  </h3>
+          </div>
+          
+          <h5>Student Offer Letter Fees = {{total_student_offer}}</h5>
+          <h5>Student account Paid ={{student_payment_done}} </h5>
+          <h5>Balance = {{balance}}</h5>
+        </div>
+          <div class="row">
+              <div class="col-md-12">
+            <!-- general form elements -->
+            <div class="card card-primary">
+              <div class="card-header">
+                <h3 class="card-title">Student Details</h3>
+              </div>
+              <!-- /.card-header -->
+              <!-- form start -->
+
+                  {% csrf_token %} 
+                  <table class="table">
+                    <thead>
+                      <tr>
+                        <th scope="col">PNR NO</th>
+                        <th scope="col">First Name</th>
+                        <th scope="col">Last Name</th>
+                        <th scope="col">Email</th>
+                        <th scope="col">Course</th>
+                        <th scope="col">Currency Type</th>
+                        <th scope="col">Final Fees</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <th scope="row">{{student.prn_number}}</th>
+                        <td>{{ student.admin.first_name }}</td>
+                  <td>{{ student.admin.last_name }}</td>
+                  <td>{{ student.admin.email }}</td>
+                  <td>{{student.course.course_name}}</td>
+                  <td>{{student.currency_type}}</td>
+                  <td>{{student.final_fees}}</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                    </div>
+                    <div class="row">
+                      <div class="col-md-12">
+                        <!-- general form elements -->
+                        <div class="card card-primary">
+                          <div class="card-header">
+                            <h3 class="card-title">Student Offer Letter Fees Details :  <br/>&nbsp;</h3>
+                            
+                            
+
+                            
+
+                          </div>
+
+
+
+                          <!-- Button trigger modal -->
+                          
+                      <table class="table">
+                        <thead>
+                          <tr>
+                            <th scope="col">Installment Date</th>
+                            <th scope="col">Fees</th>
+                            <th scope="col">currency type</th>
+                            <th scope="col">Fees in INR</th>
+                            <th scope="col">Payment Status</th>
+                            <th scope="col">Note</th>
+                            {% comment %} <th>Action</th> {% endcomment %}
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {% for student_offer in student_offer_letter_fees %}
+                          <tr>
+                            
+                            <td>{{ student_offer.installment_date }}</td>
+                            <td>{{ student_offer.fees }}</td>
+                            <td>{{student_offer.currency_type}}</td>
+                            <td>{{student_offer.inr_fees}}</td>
+                            <td>{{student_offer.payment_status}}</td>
+                            <td>{{ student_offer.note }}</td>
+                            <td>
+                                {% comment %} <a class="btn btn-success" href="{% url 'edit_student_offer_letter_fees' letter_id=student_offer.id %}" role="button">Edit</a>
+                              <a href="{% url 'delete_student_offer_letter_fees' letter_id=student_offer.id %}" class="btn btn-danger confirm-delete">Delete</a> {% endcomment %}
+                      </td>
+                          </tr>
+                          {% endfor %}
+                        </tbody>
+                      </table>
+
+                      <div class="row">
+                        <div class="col-md-12">
+                          <!-- general form elements -->
+                          <div class="card card-primary">
+                            <div class="card-header">
+                              <h3 class="card-title">Student Payment Received Details</h3>
+                              
+                              <br/>&nbsp;
+  
+                            </div>
+  
+  
+  
+                            <!-- Button trigger modal -->
+                            
+                        <table class="table">
+                          <thead>
+                            <tr>
+                              <th scope="col">Installment Date</th>
+                              <th scope="col">Fees Paid</th>
+                              <th scope="col">Currency Type</th>
+                              <th scope="col">Fees in INR</th>
+                              <th scope="col">Payment Status</th>
+                              <th scope="col">Payment Mode</th>
+                              <th scope="col">Invoice No</th>
+                              <th scope="col">Note</th>
+                              {% comment %} <th scope="col">Actions</th> {% endcomment %}
+
+                            </tr>
+                          </thead>
+                          <tbody>
+                            {% for student_pay in student_payment_receive %}
+                            <tr>
+                              
+                              <td>{{ student_pay.installment_date }}</td>
+                              <td>{{ student_pay.installment_fees }}</td>
+                              <td>{{student_pay.currency_type}}</td>
+                              <td>{{student_pay.inr_fees}}</td>
+                              <td>{{student_pay.payment_status}}</td>
+                              <td>{{student_pay.payment_options}}</td>
+                              <td>{{ student_pay.invoice_no }}</td>
+                              <td>{{ student_pay.note }}</td>
+                              <td>
+                                {% comment %} <a href="{% url 'delete_student_payment_receive' student_payment_id=student_pay.id %}" class="btn btn-danger confirm-delete">Delete</a> {% endcomment %}
+                            
+                            </tr>
+                            {% endfor %}
+                          </tbody>
+                        </table>
+  
+                      </div>
+                    </div>
+                </div>
+                <!-- /.card-body -->
+              </form>
+            </div>
+            <!-- /.card -->
+
+
+
+          </div>
+          </div>
+      </div>
+    </section>
+    <!-- /.content -->
+{% endblock main_content %}

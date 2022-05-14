@@ -202,6 +202,7 @@ urlpatterns = [
     path('student_home', StudentViews.student_home, name="student_home"),
     path('student_notice', StudentViews.student_notice,name="student_notice"),
     path('student_view_result',StudentViews.student_view_result,name="student_view_result"),
+    path('student_view_account',StudentViews.student_view_account,name="student_view_account"),
     path('view_marksheet/<int:semester_id>',StudentViews.view_marksheet,name="view_marksheet"),
     # path('view_marksheet/',StudentViews.view_marksheet,name="view_marksheet"),
     

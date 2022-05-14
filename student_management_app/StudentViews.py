@@ -7,9 +7,10 @@ from django.shortcuts import render
 from django.urls.base import reverse
 import student_management_app
 from django.views.decorators.csrf import csrf_exempt
+
 from student_management_app.forms import EditStudentForm, EditStudentProfile,addNoticeForm
 
-from student_management_app.models import Attendance, AttendanceReport, CollegeDocument, Country, Courses, CustomUser, FeedBackStudent, LeaveReportStudent, Links, Notice, SessionYearModel, State, StudentDocument, StudentResult, Students, Subjects
+from student_management_app.models import Attendance, AttendanceReport, CollegeDocument, Country, Courses, CustomUser, FeedBackStudent, LeaveReportStudent, Links, Notice, SessionYearModel, State, StudentDocument, StudentOfferLetterFee, StudentPaymentReceive, StudentResult, Students, Subjects
 
 
 def student_home(request):
@@ -692,6 +693,34 @@ def student_view_result(request):
     student=Students.objects.get(admin=request.user.id)
     studentresult=StudentResult.objects.filter(student_id=student.id)
     return render(request,"student_template/student_result.html",{"studentresult":studentresult})
+
+def _sum(arr): 
+      
+    # initialize a variable
+    # to store the sum
+    # while iterating through
+    # the array later
+    sum=0
+      
+    # iterate through the array
+    # and add each element to the sum variable
+    # one at a time
+    for i in arr:
+        sum = sum + int(i)          
+    return(sum)
+
+def student_view_account(request):
+    student = Students.objects.get(admin=request.user.id)
+    student_offer_letter_fees = StudentOfferLetterFee.objects.filter(student_id=student.id) 
+    student_payment_receive = StudentPaymentReceive.objects.filter(student_id=student.id)  
+    fees_list =student_offer_letter_fees.values_list('inr_fees', flat=True)
+    payment_list = student_payment_receive.values_list('inr_fees',flat=True)
+    student_payment_done = _sum(payment_list)
+    offer_fees = _sum(fees_list)
+    balance = offer_fees - student_payment_done
+    context = {'student':student, 'student_offer_letter_fees':student_offer_letter_fees, 'student_payment_receive':student_payment_receive, 'total_student_offer':offer_fees, 'student_payment_done':student_payment_done, 'balance':balance}
+    return render(request, 'student_template/student_view_account_template.html', context)
+
 
 def view_marksheet(request,semester_id):
     # student=Students.objects.get(admin=request.user.id)
